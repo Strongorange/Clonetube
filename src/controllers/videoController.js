@@ -3,7 +3,7 @@ import Video from "../models/Video";
 //Video.find({}, (error, videos) => {});
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}); //데이터가 들어올때까지 밑으로 진행하지 않고 기다림!!
+  const videos = await Video.find({}).sort({ createdAt: "asc" }); //데이터가 들어올때까지 밑으로 진행하지 않고 기다림!!
   return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = async (req, res) => {
@@ -59,4 +59,27 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message,
     });
   }
+};
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+  return res.redirect("/");
+};
+
+export const search = async (req, res) => {
+  const { keyword } = req.query; //GET 에서 form 으로 보낸 데이터 => url 에 표시 가져오려면 req.query 사용!
+  let videos = [];
+  if (keyword) {
+    //search, keyword가 undefined 가 아닐때 찾는다. search 페이지에 처음 들어오면 keyword 가 undefined 임!
+    videos = await Video.find({
+      //filter 사용
+      title: {
+        $regex: new RegExp(keyword, "i"), //keyword가 포함된 것을 찾음
+        //$regex: new RegExp(`^${keyword}`, "i"), // keyword로 시작하는 것을 찾음
+        // $regex: new RegExp(`${keyword}$`, "i"), // keyword로 끝나는 것을 찾음
+      },
+    });
+  }
+  return res.render("search", { pageTitle: "Search", videos });
 };
