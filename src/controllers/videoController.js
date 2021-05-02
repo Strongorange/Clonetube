@@ -10,7 +10,7 @@ export const watch = async (req, res) => {
   const id = req.params.id;
   const video = await Video.findById(id);
   if (!video) {
-    return res.render("404", { pageTitle: "Video Not Found." });
+    return res.status(404).render("404", { pageTitle: "Video Not Found." });
   }
   return res.render("watch", { pageTitle: video.title, video });
 };
@@ -54,7 +54,7 @@ export const postUpload = async (req, res) => {
     });
     return res.redirect("/");
   } catch (error) {
-    return res.render("upload", {
+    return res.status(400).render("upload", {
       pageTitle: "Upload Video",
       errorMessage: error._message,
     });
@@ -75,7 +75,7 @@ export const search = async (req, res) => {
     videos = await Video.find({
       //filter 사용
       title: {
-        $regex: new RegExp(keyword, "i"), //keyword가 포함된 것을 찾음
+        $regex: new RegExp(keyword, "i"), //keyword가 포함된 것을 찾음, i 는 대소문자 구별 없음!
         //$regex: new RegExp(`^${keyword}`, "i"), // keyword로 시작하는 것을 찾음
         // $regex: new RegExp(`${keyword}$`, "i"), // keyword로 끝나는 것을 찾음
       },
