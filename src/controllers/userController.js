@@ -1,7 +1,6 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import { token } from "morgan";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -149,59 +148,126 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
   // const id = req.session.user.id;
   // const { name, email, username, location } = req.body;
-
+  //
   if (username !== req.session.user.username) {
-    const existUsername = await User.exists({
-      username,
-    });
-    if (existUsername) {
+    console.log("form : " + username);
+    console.log("session : " + req.session.user.username);
+    const userexist = await User.exists({ username });
+    const emailexist = await User.exists({ email });
+    console.log(`userexist : ${userexist}`);
+    console.log(`emailexist : ${emailexist}`);
+    if (!userexist) {
+      const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        {
+          avatarUrl: file ? file.path : avatarUrl,
+          name,
+          email,
+          username,
+          location,
+        },
+        { new: true }
+      );
+      req.session.user = updatedUser;
+      return res.redirect("/users/edit");
+    } else {
       return res.render("edit-profile", {
-        errorMessage: "This Username is already taken",
+        errorMessage: "taken username",
       });
     }
-
-    const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        name,
-        email,
-        username,
-        location,
-      },
-      { new: true }
-    );
-    req.session.user = updatedUser;
   }
 
   if (email !== req.session.user.email) {
-    const existEmail = await User.exists({
-      email,
-    });
-    if (existEmail) {
+    console.log("form : " + email);
+    console.log("session : " + req.session.user.email);
+    const emailexist = await User.exists({ email });
+    console.log(`emailexist : ${emailexist}`);
+    if (!emailexist) {
+      const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        {
+          avatarUrl: file ? file.path : avatarUrl,
+          name,
+          email,
+          username,
+          location,
+        },
+        { new: true }
+      );
+      req.session.user = updatedUser;
+      return res.redirect("/users/edit");
+    } else {
       return res.render("edit-profile", {
-        errorMessage: "This Email is already taken",
+        errorMessage: "taken username",
       });
     }
-
-    const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        name,
-        email,
-        username,
-        location,
-      },
-      { new: true }
-    );
-    req.session.user = updatedUser;
   }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
   return res.redirect("/users/edit");
+
+  //
+  /*
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  return res.redirect("/users/edit");
+*/
 };
-export const edit = (req, res) => res.send("Edit User");
+
+export const getChangePassword = async (req, res) => {
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password doen't match",
+    });
+  }
+  user.password = newPassword;
+  await user.save(); //pre.save 비밀번호 해쉬를 위해서 사용
+  return res.redirect("/users/logout");
+};
+
 export const see = (req, res) => res.send("See User");
