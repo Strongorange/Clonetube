@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Video from "../models/Video";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
@@ -157,12 +158,8 @@ export const postEdit = async (req, res) => {
   // const { name, email, username, location } = req.body;
   //
   if (username !== req.session.user.username) {
-    console.log("form : " + username);
-    console.log("session : " + req.session.user.username);
     const userexist = await User.exists({ username });
     const emailexist = await User.exists({ email });
-    console.log(`userexist : ${userexist}`);
-    console.log(`emailexist : ${emailexist}`);
     if (!userexist) {
       const updatedUser = await User.findByIdAndUpdate(
         _id,
@@ -185,10 +182,7 @@ export const postEdit = async (req, res) => {
   }
 
   if (email !== req.session.user.email) {
-    console.log("form : " + email);
-    console.log("session : " + req.session.user.email);
     const emailexist = await User.exists({ email });
-    console.log(`emailexist : ${emailexist}`);
     if (!emailexist) {
       const updatedUser = await User.findByIdAndUpdate(
         _id,
@@ -270,4 +264,16 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/users/logout");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate("videos");
+  console.log(user);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found." });
+  }
+
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user,
+  });
+};
