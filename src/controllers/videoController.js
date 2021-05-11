@@ -10,11 +10,11 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const id = req.params.id;
   const video = await Video.findById(id).populate("owner");
-  console.log(video);
-
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video Not Found." });
   }
+  console.log(video.owner._id);
+  console.log(res.locals.loggedInUser);
   return res.render("watch", { pageTitle: video.title, video });
 };
 
