@@ -9,6 +9,7 @@ export const home = async (req, res) => {
     .populate("owner"); //데이터가 들어올때까지 밑으로 진행하지 않고 기다림!!
   return res.render("home", { pageTitle: "Home", videos });
 };
+
 export const watch = async (req, res) => {
   const id = req.params.id;
   const video = await Video.findById(id).populate("owner");
@@ -115,7 +116,7 @@ export const search = async (req, res) => {
         //$regex: new RegExp(`^${keyword}`, "i"), // keyword로 시작하는 것을 찾음
         // $regex: new RegExp(`${keyword}$`, "i"), // keyword로 끝나는 것을 찾음
       },
-    });
+    }).populate("owner");
   }
   return res.render("search", { pageTitle: "Search", videos });
 };
