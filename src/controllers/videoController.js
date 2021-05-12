@@ -4,7 +4,9 @@ import User from "../models/User";
 //Video.find({}, (error, videos) => {});
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "asc" }); //데이터가 들어올때까지 밑으로 진행하지 않고 기다림!!
+  const videos = await Video.find({})
+    .sort({ createdAt: "asc" })
+    .populate("owner"); //데이터가 들어올때까지 밑으로 진행하지 않고 기다림!!
   return res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = async (req, res) => {
