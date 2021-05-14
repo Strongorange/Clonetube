@@ -103,8 +103,15 @@ const handleMouseLeave = () => {
   //controlsTimeout 에는 현재 setTImeout 이 준 숫자가 저장
 };
 
-const handleShortcut = () => {
-  console.log("hI");
+const handleShortcut = (event) => {
+  const { code: key } = event;
+  console.log(key, typeof key);
+  if (key == "Space") {
+    handlePlayClick();
+  }
+  if (key == "KeyF") {
+    handleFullscreen();
+  }
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -117,4 +124,4 @@ videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
-document.addEventListener("keydown", handleShortcut);
+document.addEventListener("keyup", handleShortcut);
