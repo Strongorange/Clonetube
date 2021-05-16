@@ -1,3 +1,5 @@
+const { default: fetch } = require("node-fetch");
+
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
 const playBtnIcon = playBtn.querySelector("i");
@@ -105,7 +107,6 @@ const handleMouseLeave = () => {
 
 const handleShortcut = (event) => {
   const { code: key } = event;
-  console.log(key, typeof key);
   if (key == "Space") {
     handlePlayClick();
   }
@@ -114,12 +115,18 @@ const handleShortcut = (event) => {
   }
 };
 
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, { method: "POST" });
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("click", handlePlayClick);
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", handleEnded);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
