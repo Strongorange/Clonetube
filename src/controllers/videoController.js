@@ -66,13 +66,14 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session; //const _id = req.session.user._id
-  const { path: fileUrl } = req.file; //req.file.path 를 fileUrl 이름으로 저장
+  const { video, thumb } = req.files; //req.files.path 를 fileUrl 이름으로 저장 ,multer 여러파일 저장하며 files로 수정
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

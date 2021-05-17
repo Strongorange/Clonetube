@@ -25,6 +25,18 @@ videoRouter
   .route("/upload")
   .all(protectorMiddleware)
   .get(getUpload)
-  .post(videoUpload.single("video"), postUpload); //multer 는 form 의 name 을 사용
+  .post(
+    videoUpload.fields([
+      {
+        name: "video",
+        maxCount: 1,
+      },
+      {
+        name: "thumb",
+        maxCount: 1,
+      },
+    ]),
+    postUpload
+  ); //multer 는 form 의 name 을 사용
 
 export default videoRouter;
