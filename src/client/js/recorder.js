@@ -12,7 +12,7 @@ const handleDownload = async () => {
   await ffmpeg.load(); //브라우저에서 프로그램을 돌리기 때문에 프로세싱 타임이 걸림
 
   ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile)); //FFmpeg 세계에 vidieoFile 을 받아 저장
-  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4"); //webm => mp4 60프레임으로 컨버팅후 ffmpeg 세계에 저장
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4"); //webm => mp4 60프레임 rate (-r) 으로 컨버팅후 ffmpeg 세계에 저장
   await ffmpeg.run(
     "-i",
     "recording.webm",
@@ -23,9 +23,11 @@ const handleDownload = async () => {
     "thumbnail.jpg" //사진 이름 => 모든건 FS 에 저장
   );
   const mp4File = ffmpeg.FS("readFile", "output.mp4"); //FS 파일 시스템 안에있는 위에서 만든 output.mp4 를 저장
-  const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg");
+  const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg"); // 리턴은 Uint8Array 겁나 많은 숫자들
+
   const mp4Blob = new Blob([mp4File.buffer], { type: "video.mp4" }); //binary 의 raw data (비디오) 에 접근하려면 buffer 사용
-  const thumbBlob = new Blob([thumbFile.buffer], { type: "image.jpg" }); //binary 의 raw data (비디오) 에 접근하려면 buffer 사용
+  const thumbBlob = new Blob([thumbFile.buffer], { type: "image.jpg" }); //Blob 은 file-like object
+
   const mp4Url = URL.createObjectURL(mp4Blob);
   const thumbUrl = URL.createObjectURL(thumbBlob);
 
@@ -40,6 +42,15 @@ const handleDownload = async () => {
   thumbA.download = "MyThumbnail.jpg"; //앵커의 링크로 이동이 아니라 링크를 다운로드
   document.body.appendChild(thumbA); //앵커가 body에 존재해야 아래서 클릭 가능
   thumbA.click(); //앵커를 클릭한 효과를 줌 => 다운로드 실행
+
+  //사용한 파일, URL을 제거
+  ffmpeg.FS("unlink", "recording.webm");
+  ffmpeg.FS("unlink", "output.mp4");
+  ffmpeg.FS("unlink", "thumbnail.jpg");
+
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(videoFile);
 };
 
 const handleStop = () => {
