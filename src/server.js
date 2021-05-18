@@ -1,6 +1,7 @@
 import express from "express"; //express 라는 패키지를 "express" 애서 가져옴 nodeJs가 node modules에서 알아서 찾아줌 똑똑이
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -26,6 +27,7 @@ app.use(
   })
 );
 
+app.use(flash());
 app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/uploads", express.static("uploads"));

@@ -235,6 +235,10 @@ export const postEdit = async (req, res) => {
 };
 
 export const getChangePassword = async (req, res) => {
+  if ((req.session, user.socialOnly === true)) {
+    req.flash("error", "Can't Change Password");
+    return res.redirect("/");
+  }
   return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 export const postChangePassword = async (req, res) => {
@@ -260,6 +264,7 @@ export const postChangePassword = async (req, res) => {
   }
   user.password = newPassword;
   await user.save(); //pre.save 비밀번호 해쉬를 위해서 사용
+  req.flash("info", "Password Updated");
   return res.redirect("/users/logout");
 };
 
