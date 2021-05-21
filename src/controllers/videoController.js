@@ -155,5 +155,5 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id); //comment 의 id를 비디오 모델에 저장, 모델의 comment는 object Id
   video.save();
-  res.sendStatus(201);
+  return res.status(201).json({ newCommentId: comment._id });
 };
