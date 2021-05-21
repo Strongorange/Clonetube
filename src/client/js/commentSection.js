@@ -4,7 +4,7 @@ const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
 const addComment = (text, id) => {
-  const videoComments = document.querySelector(".video__comments ul");
+  const videoComments = document.querySelector(".video__comments ul"); //video__comment 안의 ul
   const newComment = document.createElement("li");
   newComment.dataset.id = id;
   newComment.className = "video__comment";
@@ -32,7 +32,7 @@ const handleSubmit = async (event) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-    }, //express 에게 json 을 보내고있다는 것을 알려줌
+    }, //backend (express 에게) json 을 보내고있다는 것을 알려줌
     body: JSON.stringify({ text }),
   });
 
