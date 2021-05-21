@@ -16,6 +16,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); //string 을 받아서 JSON 으로 변환
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,

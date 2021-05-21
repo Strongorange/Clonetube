@@ -110,9 +110,6 @@ const handleShortcut = (event) => {
   if (key == "Space") {
     handlePlayClick();
   }
-  if (key == "KeyF") {
-    handleFullscreen();
-  }
 };
 
 const handleEnded = () => {
