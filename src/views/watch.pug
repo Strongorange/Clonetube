@@ -30,7 +30,9 @@ block content
                 li.video__comment(data-id=comment.id)
                     i.fas.fa-comment  
                     span     #{comment.text}
-                    span    ❌
+                    if loggedIn
+                      if String(loggedInUser._id) === String(`${comment.owner}`)
+                           span.video__comment-removebtn    ❌
 
 
 block scripts 

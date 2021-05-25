@@ -2,6 +2,7 @@ const { default: fetch } = require("node-fetch");
 
 const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
+const removeBtn = document.querySelector(".video__comment-removebtn");
 
 const addComment = (text, id) => {
   const videoComments = document.querySelector(".video__comments ul"); //video__comment 안의 ul
@@ -43,6 +44,26 @@ const handleSubmit = async (event) => {
   }
 };
 
+const handleRemoveComment = async (event) => {
+  const videoId = videoContainer.dataset.id;
+  //html을 지워
+  const comment = event.target.parentNode;
+  const commentId = comment.dataset.id;
+  console.log(commentId);
+  comment.remove();
+  const response = await fetch(`/api/videos/${videoId}/removeComment`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ commentId }),
+  });
+};
+
 if (form) {
   form.addEventListener("submit", handleSubmit);
+}
+
+if (removeBtn) {
+  removeBtn.addEventListener("click", handleRemoveComment);
 }

@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
-  const { name, username, email, password, password2, location } = req.body;
+  const { name, username, email, password, password2, location } = req.body; //body는 input 의 name에서 가져옴
   console.log(password, password2);
   if (password !== password2) {
     return res.status(400).render("join", {
@@ -60,15 +60,16 @@ export const postLogin = async (req, res) => {
   req.session.user = user;
   return res.redirect("/");
 };
+
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GH_CLIENT,
     allow_signup: false,
-    scope: "read:user user:email",
+    scope: "read:user user:email", //github 로그인 정보설정 방법
   };
   const params = new URLSearchParams(config).toString();
-  const finalUrl = `${baseUrl}?${params}`;
+  const finalUrl = `${baseUrl}?${params}`; // ? 로 baseUrl 과 params 를 연결
   return res.redirect(finalUrl);
 };
 
@@ -77,7 +78,7 @@ export const finishGithubLogin = async (req, res) => {
   const config = {
     client_id: process.env.GH_CLIENT,
     client_secret: process.env.GH_SECRET,
-    code: req.query.code,
+    code: req.query.code, // github callback 이 code 를 제공함
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;

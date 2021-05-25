@@ -12,9 +12,13 @@ export const home = async (req, res) => {
 };
 
 export const watch = async (req, res) => {
+  console.log(req.session);
   const id = req.params.id;
   const video = await Video.findById(id).populate("owner").populate("comments");
-  console.log(video);
+  console.log("Video Info", video);
+  if (req.session.user)
+    console.log(typeof req.session.user._id, req.session.user._id);
+  console.log(typeof String(video.owner._id), video.owner._id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video Not Found." });
   }
@@ -156,4 +160,19 @@ export const createComment = async (req, res) => {
   video.comments.push(comment._id); //comment 의 id를 비디오 모델에 저장, 모델의 comment는 object Id
   video.save();
   return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const removeComment = async (req, res) => {
+  const videoId = req.params.id;
+  const commentId = req.body.commentId;
+  const comment = await Comment.findById(commentId);
+  const video = await Video.findById(videoId);
+  const videoCommentIndex = await video.comments.indexOf(commentId);
+  console.log(video.comments.length);
+  if (videoCommentIndex > -1) {
+    await video.comments.splice(videoCommentIndex, 1);
+    await video.save();
+  }
+  await comment.deleteOne({ _id: commentId });
+  console.log(video.comments.length);
 };
