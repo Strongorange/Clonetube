@@ -62,3 +62,12 @@ https://www.npmjs.com/package/multer-s3
 s3 객체를 생성하는데 AWS_ID, AWS_SECRET 을 넘겨줘야함
 설정하고 localhost 에서 프로파일 사진을 바꿔봤는데 바뀌지 않고 DB를 확인해보니 avatarUrl 이 사라짐
 알고보니 사진이 AWS 서버에 전송됨!
+
+17-8
+AWS S3 에서 공개권한 맨 마지막 2개만 체크
+multerUploader 에 acl: "public-read" 로 누구나 읽을 수 있게 설정
+AWS 에 파일을 올리면 file.path 는 사용되지 않고 file.location 으로 바꿔줘야함 (console로 확인)
+videoController 에서도 .path 를 .location 으로 수정해줌
+템플릿에 비디오, 사진 소스를 aws 서버에 맞게 수정 "/" 를 삭제해줌
+이제 파일들은 AWS 에 존재하고 DB 에는 AWS 파일 URL 경로가 지정되어 템플릿에서 AWS 링크를 소스로 불러와
+Heroku 에서 서버를 리빌드해도 파일이 삭제되지 않음!
