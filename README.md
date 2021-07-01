@@ -39,3 +39,16 @@ Web process failed to bind to $PORT within 60 seconds of launch => Heroku 가 �
 우리는 포트 4000을 설정했는데 Heroku 는 랜덤으로 우리에게 포트를 줌 => 4000으로 연결하지말고 Heroku가 준 Port 로 설정
 컴퓨터에서는 4000 Heroku 에서는 변수로 포트를 가지게 설정 => process.env.PORT 에 Heroku 가 준 포트가 설정됨
 다 작동되는데 깃허브 로그인에 필요한 GH_CLIENT, GH_SECRET 이 없어서 작동하지 않음 => HEROKU 페이지에서 설정해 줌
+
+17-6
+view partials header 에서 소셜 로그인이라면 아바타가 잘 나오게 "/" 을 지워줌 아니라면 사진을 업로드했으니 "/" 을 붙혀줌
+로그인하고 atlas 로 가보면 db에 유저가 실제로 생성됨
+$ git add .
+$ git commit -am "make it better"
+$ git push heroku master
+해서 heroku deploy
+
+깃허브로 배포하기
+깃허브로 하면 master 로 push 하면 바로 배포가 됨
+
+현재는 사진, 동영상들을 HEROKU 서버에 올리기때문에 수정사항이생겨 서버를 다시 배포하면 사진, 동영상들은 없어짐
