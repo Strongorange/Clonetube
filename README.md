@@ -12,3 +12,9 @@ regenerator runtime 을 해결하기 위해서 init.js 맨 위에 regenerator ru
 babel 터미널을 종료하고 npm start 를하면 nodeJs 가 우리의 서버를 실행중
 홈페이지로 가보면 잘 동작하는데 build의 폴더에는 view 가 없어서 사실 되면 이상함
 => cwd 에서 src/view 에서 골라오기에 src 폴더의 view 에서 템플릿을 꺼내와서 동작중
+
+17-2
+webpack 은 development 와 production 두 가지 모드가있음
+packpage.json 에서 모드를 전달해주고 dev 모드에서만 watch 를 활성화하기 위해서 webpack 설정에서 mode 와 watch 없앰
+assets 를 빌드하고 server 를 빌드하고 npm start 로 서버 실행 => Babel 의 도움 없이도 node 가 코드 이해 가능
+build 스크립트에 두 빌드를 묶어줌

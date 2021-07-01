@@ -8,9 +8,11 @@
   },
   "scripts": {
     "start": "node build/init.js",
-    "dev": "nodemon",
-    "assets": "webpack",
-    "build": "babel src -d build"
+    "dev:server": "nodemon",
+    "dev:assets": "webpack --mode=development -w",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
+    "build": "npm run build:server && npm run build:assets"
   },
   "author": "chanhwi",
   "license": "ISC",
