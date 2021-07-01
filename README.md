@@ -52,3 +52,13 @@ $ git push heroku master
 깃허브로 하면 master 로 push 하면 바로 배포가 됨
 
 현재는 사진, 동영상들을 HEROKU 서버에 올리기때문에 수정사항이생겨 서버를 다시 배포하면 사진, 동영상들은 없어짐
+
+17-7
+위의 문제를 해결하기 위해서 서버에 사진, 동영상을 올리지 않을 것 => 파일을 저장하기위해 AWS 를 사용
+AWS S3 에 가입하고 버켓을 만들었음
+IAM 으로 가서 사용자를 추가하고 AWS_ID, AWS_SECRET 을 .env 파일에 적어주고 Heroku setting 에 저장
+https://www.npmjs.com/package/multer-s3
+이제 Multer S3 라는 패키지를 사용해서 s3 에 파일을 업로드 aws-sdk 라는 패키지도 설치해줌
+s3 객체를 생성하는데 AWS_ID, AWS_SECRET 을 넘겨줘야함
+설정하고 localhost 에서 프로파일 사진을 바꿔봤는데 바뀌지 않고 DB를 확인해보니 avatarUrl 이 사라짐
+알고보니 사진이 AWS 서버에 전송됨!
