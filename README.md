@@ -18,3 +18,12 @@ webpack 은 development 와 production 두 가지 모드가있음
 packpage.json 에서 모드를 전달해주고 dev 모드에서만 watch 를 활성화하기 위해서 webpack 설정에서 mode 와 watch 없앰
 assets 를 빌드하고 server 를 빌드하고 npm start 로 서버 실행 => Babel 의 도움 없이도 node 가 코드 이해 가능
 build 스크립트에 두 빌드를 묶어줌
+
+17-3 Heroku Deploy
+heroku 가 보는 파일은 GitHub 가 보는 파일!!!!!!!!!!!! => Histroy 에 있는 파일들을 본다고 생각하면 됨
+=> gitignore 에 있는 파일들을 볼 수 없음
+heroku 를 설치후 로그인 => git push heroky master 를 실행하면 heroku 가 배포를 해줌
+heroku 는 기본적으로 npm start 를 실행 => Heroku 는 git histroy 를 보기때문에 commit 을 해야 제대로 동작
+heroku logs --tail 로 실시간 heroku 모니터링 가능
+=> client 를 init 할 수 없다는 에러가 발생 => Heroku 는 Git 이 볼 수 있는 파일을 봄 => DB 의 URL 은 .process.env.DB_URL 을 사용
+=> gitignore 에 등륵되어있어 heroku 가 볼 수 없음 => 그렇다고 절대 .env 를 깃에 올리면 안 됨
