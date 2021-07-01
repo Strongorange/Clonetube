@@ -33,3 +33,8 @@ MongDBAtlas 에 가입한 후 프로젝트 생성 후 클러스터를 추가
 절차를 진행하면 우리의 DB URL 이 생성됨 => 생성된 URL 로 DB 연결 => 파일을 깃에 올리면 안되니 heroku 의 admin panel 사용
 heroku 앱 setting 에서 reveal config var 에서 변수를 추가할 수 있음 => DB_URL 변수를 추가
 !!!!! username 과 password 를 확실히 하자!!!!!!!!!!!
+
+17-5
+Web process failed to bind to $PORT within 60 seconds of launch => Heroku 가 우리 서버의 PORT 와 연결되지 않음
+우리는 포트 4000을 설정했는데 Heroku 는 랜덤으로 우리에게 포트를 줌 => 4000으로 연결하지말고 Heroku가 준 Port 로 설정
+컴퓨터에서는 4000 Heroku 에서는 변수로 포트를 가지게 설정
