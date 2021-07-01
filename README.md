@@ -37,4 +37,5 @@ heroku 앱 setting 에서 reveal config var 에서 변수를 추가할 수 있�
 17-5
 Web process failed to bind to $PORT within 60 seconds of launch => Heroku 가 우리 서버의 PORT 와 연결되지 않음
 우리는 포트 4000을 설정했는데 Heroku 는 랜덤으로 우리에게 포트를 줌 => 4000으로 연결하지말고 Heroku가 준 Port 로 설정
-컴퓨터에서는 4000 Heroku 에서는 변수로 포트를 가지게 설정
+컴퓨터에서는 4000 Heroku 에서는 변수로 포트를 가지게 설정 => process.env.PORT 에 Heroku 가 준 포트가 설정됨
+다 작동되는데 깃허브 로그인에 필요한 GH_CLIENT, GH_SECRET 이 없어서 작동하지 않음 => HEROKU 페이지에서 설정해 줌
