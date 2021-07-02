@@ -4,6 +4,8 @@ import aws from "aws-sdk";
 
 const isHeroku = process.env.NODE_ENV === "production";
 
+console.log(isHeroku);
+
 const s3 = new aws.S3({
   credentials: {
     accessKeyId: process.env.AWS_ID,

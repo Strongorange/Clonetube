@@ -177,4 +177,5 @@ export const removeComment = async (req, res) => {
   }
   await comment.deleteOne({ _id: commentId });
   console.log(video.comments.length);
+  return res.sendStatus(201);
 };
