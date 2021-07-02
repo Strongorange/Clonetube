@@ -65,9 +65,24 @@ s3 객체를 생성하는데 AWS_ID, AWS_SECRET 을 넘겨줘야함
 
 17-8
 AWS S3 에서 공개권한 맨 마지막 2개만 체크
+ACL (Aceess Control List 는 기본적으로 object 의 권한)
 multerUploader 에 acl: "public-read" 로 누구나 읽을 수 있게 설정
 AWS 에 파일을 올리면 file.path 는 사용되지 않고 file.location 으로 바꿔줘야함 (console로 확인)
 videoController 에서도 .path 를 .location 으로 수정해줌
+템플릿에서 오류가 나지 않게 if loggedInUser.avatarUrl 추가
 템플릿에 비디오, 사진 소스를 aws 서버에 맞게 수정 "/" 를 삭제해줌
 이제 파일들은 AWS 에 존재하고 DB 에는 AWS 파일 URL 경로가 지정되어 템플릿에서 AWS 링크를 소스로 불러와
 Heroku 에서 서버를 리빌드해도 파일이 삭제되지 않음!
+
+17-9
+middlewares 업로더 storage 설정에서 bucket 이름에 /image, /videos 설정해서 AWS 폴더 경로에 저장되게 설정
+Heroku 에서 작업할땐 multeruploader 만 사용
+내 컴퓨터에서 작업한다면 내 컴퓨터의 파일 시스템 ploader 만 사용 => 환경 변수에 접근하는 방법을 사용해야함
+=> process.env.NODE_ENV === "production" 이면 Heroku 에 있다는 이야기
+이제 로컬호스트에서 업로드시에는 컴퓨터에 heroku 에서 업로드시에는 AWS 서버로 업로드
+그런데 user.avatarUrl 이 다시 null 로 됨 => 아까 file.path 에서 file.location 으로 바꿔줬는데
+로컬호스트에서 작업시에는 file.path 를 사용해야함
+=> userController 에서 삼항 연산자를 복수로 사용해서 file이 있으면 isHeroku 인지 검사하고 맞으면 location 아니면 path
+파일이 없으면 avatar url 을 그대로 사용
+
+비디오 컨트롤러 postUpload 에서도 heroku 라면 비디오와 섬네일을 .location 에서 아니라면 .path 에서 가져옴
